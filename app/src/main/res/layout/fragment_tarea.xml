@@ -125,4 +125,22 @@
         app:layout_constraintStart_toEndOf="@+id/tvEstado"
         app:layout_constraintTop_toTopOf="@+id/tvEstado" />
 
+    <TextView
+        android:id="@+id/tvHoras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Llevo 10 horas trabajadas"
+        app:layout_constraintStart_toStartOf="@+id/rgEstado"
+        app:layout_constraintTop_toBottomOf="@+id/rgEstado" />
+
+    <SeekBar
+        android:id="@+id/sbHoras"
+        android:layout_width="189dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="12dp"
+        android:max="30"
+        app:layout_constraintStart_toEndOf="@+id/tvHoras"
+        app:layout_constraintTop_toTopOf="@+id/tvHoras" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
