@@ -4,9 +4,18 @@
     <!-- Strings used for fragments for navigation -->
     <string name="lista_fragment_label">Lista Tareas</string>
     <string name="tarea_fragment_label">Tarea</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="categoria">Categoria</string>
+    <string-array name="categoria">
+        <item>Reparación</item>
+        <item>Instalación</item>
+        <item>Mantenimiento</item>
+        <item>Comercial</item>
+        <item>Otros</item>
+    </string-array>
+    <string-array name="prioridad">
+        <item>Baja</item>
+        <item>Media</item>
+        <item>Alta</item>
+    </string-array>
+    <string name="mensaje_categoria">Has seleccionado %1$s como categoría</string>
 </resources>
