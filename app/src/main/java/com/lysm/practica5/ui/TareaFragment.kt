@@ -42,6 +42,7 @@ class TareaFragment : Fragment() {
         iniciaSpCategoria()
         iniciaSpPrioridad()
         iniciaSwPagado ()
+        iniciaRgEstado()
     }
 
     private fun iniciaSpCategoria() {
@@ -122,6 +123,20 @@ class TareaFragment : Fragment() {
         binding.ivPagado.setImageResource(R.drawable.ic_nopagado)
     }
 
+    private fun iniciaRgEstado() {
+        //listener de radioGroup
+        binding.rgEstado.setOnCheckedChangeListener{_,checkedId ->
+            val imagen = when (checkedId) {
+                //el id del RadioButton seleccionado
+                R.id.rbAbierta -> R.drawable.ic_abierto
+                R.id.rbEnCurso -> R.drawable.ic_encurso
+                else -> R.drawable.ic_cerrado
+            }
+            binding.ivEstado.setImageResource(imagen)
+        }
+        //iniciamos a abierto
+        binding.rgEstado.check(R.id.rbAbierta)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
