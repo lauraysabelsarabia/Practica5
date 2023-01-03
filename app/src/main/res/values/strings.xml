@@ -25,4 +25,8 @@
     <string name="cerrada">Cerrada</string>
     <string name="estado_de_la_tarea">Estado de la tarea</string>
     <string name="horas_trabajadas">Llevo %1$d horas trabajadas</string>
+    <string name="valoraci_n_del_cliente">Valoración del Cliente</string>
+    <string name="llevo_10_horas_trabajadas">Llevo 10 horas trabajadas</string>
+    <string name="tecnico">Tecnico</string>
+    <string name="t_cnico">Técnico</string>
 </resources>
