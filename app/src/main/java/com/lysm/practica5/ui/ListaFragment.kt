@@ -40,28 +40,42 @@ class ListaFragment : Fragment() {
 
         //importar import androidx.lifecycle.observe
 
-        viewModel.tareasLiveData.observe(viewLifecycleOwner, Observer<List<Tarea>>{ lista ->
+        viewModel.tareasLiveData.observe(viewLifecycleOwner, Observer<List<Tarea>> { lista ->
             actualizaLista(lista)
         })
 
-     /*   binding.buttonFirst.setOnClickListener {
+        /*   binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }*/
         binding.fabNuevo.setOnClickListener {
-            findNavController().navigate(R.id.action_editar)
+            // findNavController().navigate(R.id.action_editar) este fue modificado por el siguiente
+            //creamos accion eviamos argumento nulo porque queremos crear NuevaTarea
+            val action = ListaFragmentDirections.actionEditar(null)
+            findNavController().navigate(action)
+        }
+        //para prueba, editamos una tarea aleatoria
+        binding.btPruebaEdicion.setOnClickListener {
+            //cogemos la lista actual de Tareas que tenemos en el ViewModel.
+            val lista = viewModel.tareasLiveData.value
+            //buscamos una tarea aleatoriamente
+            val tarea = lista?.get((0..lista.lastIndex).random())
+            //se la enviamos a TareaFragment para su edición
+            val action = ListaFragmentDirections.actionEditar(tarea)
+            findNavController().navigate(action)
         }
     }
 
-    private fun actualizaLista (lista:List<Tarea>?) {
-        var listaString=""
-        lista?.forEach(){
-            listaString="$listaString ${it.id}-${it.tecnico}-${it.descripcion}-${if(it.pagado) "pagado" else "no pagado"}\n"
-        }
-        binding.tvLista.setText(listaString)
+    private fun actualizaLista(lista: List<Tarea>?) {
+            var listaString = ""
+            lista?.forEach() {
+                listaString =
+                    "$listaString ${it.id}-${it.tecnico}-${it.descripcion}-${if (it.pagado) "pagado" else "no pagado"}\n"
+            }
+            binding.tvLista.setText(listaString)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+        override fun onDestroyView() {
+            super.onDestroyView()
+            _binding = null
+        }
 }
