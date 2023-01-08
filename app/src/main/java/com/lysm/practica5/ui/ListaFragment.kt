@@ -63,6 +63,8 @@ class ListaFragment : Fragment() {
             val action = ListaFragmentDirections.actionEditar(tarea)
             findNavController().navigate(action)
         }
+        iniciaFiltros()
+
     }
 
     private fun actualizaLista(lista: List<Tarea>?) {
@@ -72,6 +74,15 @@ class ListaFragment : Fragment() {
         }
             binding.tvLista.setText(listaString)
     }
+
+    private fun iniciaFiltros() {
+        binding.swSinPagar.setOnCheckedChangeListener() { _,isChecked->
+            //actualiza el LiveData SoloSinPagarliveData que a su vez modifica tareasLiveData
+            //mediante el Tranformation
+            viewModel.setSoloSinPagar(isChecked)
+        }
+    }
+
 
         override fun onDestroyView() {
             super.onDestroyView()
