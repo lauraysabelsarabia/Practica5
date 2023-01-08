@@ -16,6 +16,7 @@ class AppViewModel(application: Application):AndroidViewModel(application){
     val tareasLiveData :LiveData<ArrayList<Tarea>>
     // creamos el liveData de tipo Booleano. Representa nuestro filtro
     private val soloSinPagarLiveData = MutableLiveData<Boolean>(false)
+    private val estadoLiveData= MutableLiveData<Int>(0)
 
     //inicio ViewModel
 
@@ -25,8 +26,11 @@ class AppViewModel(application: Application):AndroidViewModel(application){
         repositorio=Repository
         //tareasLiveData=repositorio.getAllTareas()
         //asocioamos el tareasLiveData en soloSinPagarLiveData
-        tareasLiveData=Transformations.switchMap(soloSinPagarLiveData)
-        {soloSinPagar->Repository.getTareasFiltroSinPagar(soloSinPagar)}
+        //tareasLiveData=Transformations.switchMap(soloSinPagarLiveData)
+        //{soloSinPagar->Repository.getTareasFiltroSinPagar(soloSinPagar)}
+        tareasLiveData= Transformations.switchMap(estadoLiveData)
+        {estadoLiveData->Repository.getTareasFiltroEstado(estadoLiveData)}
+
     }
     fun addTarea(tarea: Tarea) = repositorio.addTarea(tarea)
     fun delTarea(tarea: Tarea) = repositorio.delTarea(tarea)
@@ -36,4 +40,10 @@ class AppViewModel(application: Application):AndroidViewModel(application){
      */
     fun setSoloSinPagar(soloSinPagar:Boolean)
     {soloSinPagarLiveData.value=soloSinPagar}
+
+    fun setEstado(estado:Int)
+    {estadoLiveData.value=estado}
+
+
+
 }

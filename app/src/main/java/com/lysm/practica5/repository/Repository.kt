@@ -28,5 +28,8 @@ object Repository {
     fun getTareasFiltroSinPagar(soloSinPagar:Boolean)=
         modelTareas.getTareasFiltroSinPagar(soloSinPagar)
 
+    fun getTareasFiltroEstado(estado:Int)=
+        modelTareas.getTareasFiltroEstado(estado)
+
 
 }

@@ -20,15 +20,15 @@
 
     <TextView
         android:id="@+id/tvLista"
-        android:layout_width="386dp"
-        android:layout_height="587dp"
+        android:layout_width="410dp"
+        android:layout_height="539dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.416" />
+        app:layout_constraintVertical_bias="0.658" />
 
     <Button
         android:id="@+id/btPruebaEdicion"
@@ -49,5 +49,39 @@
         android:text="Sin pagar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgEstado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/swSinPagar"
+        app:layout_constraintTop_toBottomOf="@+id/swSinPagar">
+
+        <RadioButton
+            android:id="@+id/rbAbierta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/abierta" />
+
+        <RadioButton
+            android:id="@+id/rbEnCurso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/en_curso" />
+
+        <RadioButton
+            android:id="@+id/rbCerrada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cerrada" />
+
+        <RadioButton
+            android:id="@+id/rbTodas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/todas" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

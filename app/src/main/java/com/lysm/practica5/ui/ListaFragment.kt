@@ -81,8 +81,17 @@ class ListaFragment : Fragment() {
             //mediante el Tranformation
             viewModel.setSoloSinPagar(isChecked)
         }
+        binding.rgEstado.setOnCheckedChangeListener { _, checkedId ->
+            val estado = when (checkedId) {//el id del RadioButton seleccionado
+                //id de cada RadioButon
+                R.id.rbAbierta -> 0
+                R.id.rbEnCurso->1
+                R.id.rbCerrada->2
+                else -> 3
+            }
+            viewModel.setEstado(estado)
+        }
     }
-
 
         override fun onDestroyView() {
             super.onDestroyView()

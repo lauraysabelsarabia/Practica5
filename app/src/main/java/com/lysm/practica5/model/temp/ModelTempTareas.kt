@@ -101,4 +101,12 @@ object ModelTempTareas {
         return tareasLiveData
     }
 
+    fun getTareasFiltroEstado(estado:Int): LiveData<ArrayList<Tarea>> {
+        //devuelve el LiveData con la  lista filtrada o entera
+        tareasLiveData.value=
+            tareas.filter { it.estado == estado} as ArrayList<Tarea>
+        return tareasLiveData
+    }
+
+
 }
