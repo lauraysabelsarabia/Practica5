@@ -66,11 +66,10 @@ class ListaFragment : Fragment() {
     }
 
     private fun actualizaLista(lista: List<Tarea>?) {
-            var listaString = ""
-            lista?.forEach() {
-                listaString =
-                    "$listaString ${it.id}-${it.tecnico}-${it.descripcion}-${if (it.pagado) "pagado" else "no pagado"}\n"
-            }
+        var listaString=""
+        lista?.forEach(){
+            listaString="$listaString ${it.id}-${it.tecnico}-${it.descripcion}-${if(it.pagado) "pagado" else "no pagado"}\n"
+        }
             binding.tvLista.setText(listaString)
     }
 

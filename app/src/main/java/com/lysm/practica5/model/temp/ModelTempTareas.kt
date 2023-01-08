@@ -12,7 +12,7 @@ object ModelTempTareas {
     private val tareas = ArrayList<Tarea>()
 
     //LiveData para observar en la vista los cambios en la lista
-    private val tareasLiveData = MutableLiveData<List<Tarea>>(tareas)
+    private val tareasLiveData = MutableLiveData<ArrayList<Tarea>>(tareas)
 
     //el context que suele ser neceario en acceso a datos
     private lateinit var application: Application
@@ -28,7 +28,7 @@ object ModelTempTareas {
      * para evitar su modificación en las capas superiores
      */
 
-    fun getAllTareas(): LiveData<List<Tarea>> {
+    fun getAllTareas(): LiveData<ArrayList<Tarea>> {
         tareasLiveData.value = tareas
         return tareasLiveData
     }
@@ -43,7 +43,8 @@ object ModelTempTareas {
         val pos = tareas.indexOf(tarea)
         if (pos < 0) { //Si no existe
             tareas.add(tarea)
-        } else { //si existe
+        } else {
+            //si existe se sustituye
             tareas.set(pos,tarea)
         }
 
@@ -83,7 +84,7 @@ object ModelTempTareas {
                 (0..30).random(),
                 (0..5).random().toFloat(),
                 tecnicos.random(),
-                "tarea $it realizada por el técnico \n Texto de ejemplo. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text"
+                "tarea $it realizada por el técnico \n Texto de ejemplo.Lorem ip"
             )
             tareas.add(tarea)
         })

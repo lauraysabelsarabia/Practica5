@@ -3,7 +3,6 @@ package com.lysm.practica5.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import com.lysm.practica5.model.Tarea
 import com.lysm.practica5.repository.Repository
 
@@ -12,7 +11,7 @@ class AppViewModel(application:Application):AndroidViewModel(application){
     private val repositorio:Repository
 
     //liveData de lista de tareas
-    val tareasLiveData:LiveData<List<Tarea>>
+    internal val tareasLiveData :LiveData<ArrayList<Tarea>>
 
     //inicio ViewModel
 
@@ -22,6 +21,6 @@ class AppViewModel(application:Application):AndroidViewModel(application){
         repositorio=Repository
         tareasLiveData=repositorio.getAllTareas()
     }
-    fun addTarea(tarea: Tarea)=repositorio.addTarea(tarea)
-    fun delTarea(tarea: Tarea)=repositorio.delTarea(tarea)
+    fun addTarea(tarea: Tarea) = repositorio.addTarea(tarea)
+    fun delTarea(tarea: Tarea) = repositorio.delTarea(tarea)
 }
