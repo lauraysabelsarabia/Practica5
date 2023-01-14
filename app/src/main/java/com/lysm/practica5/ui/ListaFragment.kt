@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.lysm.practica5.R
+import com.lysm.practica5.adapters.TareasAdapter
 import com.lysm.practica5.databinding.FragmentListaBinding
 import com.lysm.practica5.model.Tarea
 import com.lysm.practica5.viewmodel.AppViewModel
@@ -20,6 +22,7 @@ class ListaFragment : Fragment() {
 
     private var _binding: FragmentListaBinding? = null
     private val viewModel: AppViewModel by activityViewModels()
+    lateinit var tareasAdapter: TareasAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,11 +40,13 @@ class ListaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        iniciaRecycleView()
+
 
         //importar import androidx.lifecycle.observe
-
         viewModel.tareasLiveData.observe(viewLifecycleOwner, Observer<List<Tarea>> { lista ->
-            actualizaLista(lista)
+            //actualizaLista(lista)
+            tareasAdapter.setLista(lista)
         })
 
         /*   binding.buttonFirst.setOnClickListener {
@@ -68,15 +73,16 @@ class ListaFragment : Fragment() {
     }
 
     private fun actualizaLista(lista: List<Tarea>?) {
-        var listaString=""
-        lista?.forEach(){
-            listaString="$listaString ${it.id}-${it.tecnico}-${it.descripcion}-${if(it.pagado) "pagado" else "no pagado"}\n"
+        var listaString = ""
+        lista?.forEach() {
+            listaString =
+                "$listaString ${it.id}-${it.tecnico}-${it.descripcion}-${if (it.pagado) "pagado" else "no pagado"}\n"
         }
-          //  binding.tvLista.setText(listaString)
+        //  binding.tvLista.setText(listaString)
     }
 
     private fun iniciaFiltros() {
-        binding.swSinPagar.setOnCheckedChangeListener() { _,isChecked->
+        binding.swSinPagar.setOnCheckedChangeListener() { _, isChecked ->
             //actualiza el LiveData SoloSinPagarliveData que a su vez modifica tareasLiveData
             //mediante el Tranformation
             viewModel.setSoloSinPagar(isChecked)
@@ -85,16 +91,27 @@ class ListaFragment : Fragment() {
             val estado = when (checkedId) {//el id del RadioButton seleccionado
                 //id de cada RadioButon
                 R.id.rbAbierta -> 0
-                R.id.rbEnCurso->1
-                R.id.rbCerrada->2
+                R.id.rbEnCurso -> 1
+                R.id.rbCerrada -> 2
                 else -> 3
             }
             viewModel.setEstado(estado)
         }
     }
 
-        override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
+    private fun iniciaRecycleView() {
+        //creamos el adaptador
+        tareasAdapter = TareasAdapter()
+        with(binding.rvTareas) {
+            //Creamos el layoutManager
+            layoutManager = LinearLayoutManager(activity)
+            //le asignamos el adaptador
+            adapter = tareasAdapter
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
