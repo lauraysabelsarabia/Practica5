@@ -41,6 +41,7 @@ class ListaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         iniciaRecycleView()
+        iniciaCRUD()
 
 
         //importar import androidx.lifecycle.observe
@@ -52,12 +53,7 @@ class ListaFragment : Fragment() {
         /*   binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }*/
-        binding.fabNuevo.setOnClickListener {
-            // findNavController().navigate(R.id.action_editar) este fue modificado por el siguiente
-            //creamos accion eviamos argumento nulo porque queremos crear NuevaTarea
-            val action = ListaFragmentDirections.actionEditar(null)
-            findNavController().navigate(action)
-        }
+
         //para prueba, editamos una tarea aleatoria
         /*binding.btPruebaEdicion.setOnClickListener {
             //cogemos la lista actual de Tareas que tenemos en el ViewModel.
@@ -69,7 +65,42 @@ class ListaFragment : Fragment() {
             findNavController().navigate(action)
         }*/
         iniciaFiltros()
+    }
 
+    private fun iniciaRecycleView() {
+        //creamos el adaptador
+        tareasAdapter = TareasAdapter()
+        with(binding.rvTareas) {
+            //Creamos el layoutManager
+            layoutManager = LinearLayoutManager(activity)
+            //le asignamos el adaptador
+            adapter = tareasAdapter
+        }
+    }
+
+    private fun iniciaCRUD(){
+        //************Nueva Tarea****************
+        binding.fabNuevo.setOnClickListener {
+            //creamos acción enviamos argumento nulo porque queremos crear NuevaTarea
+            val action=ListaFragmentDirections.actionEditar(null)
+            findNavController().navigate(action)
+        }
+        tareasAdapter.onTareaClickListener = object : TareasAdapter.OnTareaClickListener {
+            //**************Editar  Tarea*************
+
+            override fun onTareaClick(tarea: Tarea) {
+                //creamos acción enviamos argumento la tarea para editarla
+                val action = ListaFragmentDirections.actionEditar(tarea)
+                findNavController().navigate(action)
+            }
+            //***********Borrar Tarea************
+            override fun onTareaBorrarClick(tarea: Tarea) {
+                //borramos directamente la tarea
+                viewModel.delTarea(tarea!!)
+
+            }
+
+        }
     }
 
     private fun actualizaLista(lista: List<Tarea>?) {
@@ -99,16 +130,6 @@ class ListaFragment : Fragment() {
         }
     }
 
-    private fun iniciaRecycleView() {
-        //creamos el adaptador
-        tareasAdapter = TareasAdapter()
-        with(binding.rvTareas) {
-            //Creamos el layoutManager
-            layoutManager = LinearLayoutManager(activity)
-            //le asignamos el adaptador
-            adapter = tareasAdapter
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
