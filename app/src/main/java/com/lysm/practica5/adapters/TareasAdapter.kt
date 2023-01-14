@@ -11,6 +11,7 @@ import com.lysm.practica5.model.Tarea
 class TareasAdapter() :
     RecyclerView.Adapter<TareasAdapter.TareaViewHolder>() {
     lateinit var listaTareas: List<Tarea>
+    var onTareaClickListener: OnTareaClickListener? = null
 
     fun setLista(lista: List<Tarea>) {
         listaTareas = lista
@@ -19,7 +20,22 @@ class TareasAdapter() :
     }
 
     inner class TareaViewHolder(val binding: ItemTareaBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            //inicio del click de icono borrar
+            binding.ivBorrar.setOnClickListener() {
+                //recuperamos la tarea de la lista
+                val tarea = listaTareas.get(this.adapterPosition)
+                //llamamos al evento borrar que estará definido en el fragment
+                onTareaClickListener?.onTareaBorrarClick(tarea)
+            }
+            //inicio el click sobre el layout (constraintLayout)
+            binding.root.setOnClickListener() {
+                val tarea = listaTareas.get(this.adapterPosition)
+                onTareaClickListener?.onTareaClick(tarea)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TareaViewHolder {
         //utilizamos binding, en otro caso hay que indicar el item.xml. Para más detalles puedes verlo en la documentación
@@ -28,12 +44,13 @@ class TareasAdapter() :
         return TareaViewHolder(binding)
     }
 
-
+    //Tamaño de la lista
+    override fun getItemCount(): Int = listaTareas?.size ?: 0
     override fun onBindViewHolder(tareaViewHolder: TareaViewHolder, pos: Int) {
         //Nos pasan la posición del  item a mostrar en el viewHolder
-        with (tareaViewHolder) {
+        with(tareaViewHolder) {
             //cogemos la tarea a mostrar y rellenamos los campos del ViewHolder
-            with (listaTareas.get(pos)) {
+            with(listaTareas.get(pos)) {
                 binding.tvId.text = id.toString()
                 binding.tvDescripcion.text = descripcion
                 binding.tvTecnico.text = tecnico
@@ -57,8 +74,12 @@ class TareasAdapter() :
         }
     }
 
+    interface OnTareaClickListener {
+        //editar tarea que contiene el ViewHolder
+        fun onTareaClick(tarea: Tarea)
 
-    //Tamaño de la lista
-    override fun getItemCount(): Int = listaTareas?.size ?: 0
+        //Borrar tarea que contiene el ViewHolder
+        fun onTareaBorrarClick(tarea: Tarea)
+    }
 
 }
