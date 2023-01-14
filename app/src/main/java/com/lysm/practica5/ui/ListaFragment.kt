@@ -1,5 +1,7 @@
 package com.lysm.practica5.ui
 
+import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -96,12 +98,14 @@ class ListaFragment : Fragment() {
             //***********Borrar Tarea************
             override fun onTareaBorrarClick(tarea: Tarea) {
                 //borramos directamente la tarea
-                viewModel.delTarea(tarea!!)
+                //viewModel.delTarea(tarea!!)
+                borrarTarea(tarea)
 
             }
 
         }
     }
+
 
     private fun actualizaLista(lista: List<Tarea>?) {
         var listaString = ""
@@ -128,6 +132,25 @@ class ListaFragment : Fragment() {
             }
             viewModel.setEstado(estado)
         }
+    }
+
+    fun borrarTarea (tarea:Tarea){
+        AlertDialog.Builder(activity as Context)
+            .setTitle(android.R.string.dialog_alert_title)
+            //recuerda:todo el texto en el string.xml
+            .setMessage("Desea borrar la Tarea ${tarea.id}?")
+            //acción si pulsa si
+            .setPositiveButton(android.R.string.ok){v,_->
+                //borramos la tarea
+                viewModel.delTarea(tarea)
+                //cerramos el dialogo
+                v.dismiss()
+            }
+            //accion si pulsa no
+            .setNegativeButton(android.R.string.cancel){v,_->v.dismiss()}
+            .setCancelable(false)
+            .create()
+            .show()
     }
 
 
