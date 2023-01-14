@@ -59,7 +59,7 @@ class TareaFragment : Fragment() {
         iniciaSbHoras()
 
         //si es nueva tarea o es una edición
-        if (esNuevo) //nueva tarea
+       if (esNuevo) //nueva tarea
             //cambiamos el título de la ventana
             (requireActivity() as AppCompatActivity).supportActionBar?.title="Nueva tarea"
         else //editar tarea
