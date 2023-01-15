@@ -2,10 +2,11 @@ package com.lysm.practica5.model.temp
 
 import android.app.Application
 import android.content.Context
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.lysm.practica5.model.Tarea
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 object ModelTempTareas {
@@ -21,7 +22,9 @@ object ModelTempTareas {
     //el método invoke permite iniciar el objeto Singlenton
     operator fun invoke(context: Context) {
         this.application = context.applicationContext as Application
-        iniciaPruebaTareas()
+        //iniciaPruebaTareas()
+        //lanzamos la corrutina
+        GlobalScope.launch { iniciaPruebaTareas() }
     }
 
     /**
@@ -52,8 +55,8 @@ object ModelTempTareas {
         // se actualiza LiveData
         tareasLiveData.value = tareas
     }*/
-    suspend
-    fun addTarea(tarea: Tarea) {
+
+    suspend fun addTarea(tarea: Tarea) {
         val pos = tareas.indexOf(tarea)
         if (pos < 0) { //Si no existe
             tareas.add(tarea)
@@ -71,8 +74,7 @@ object ModelTempTareas {
      * para avisar a los observadores
      */
 
-    suspend
-    fun delTarea(tarea: Tarea) {
+    suspend fun delTarea(tarea: Tarea) {
         //Thread.sleep(10000)
         tareas.remove(tarea)
         //tareasLiveData.value = tareas
@@ -87,7 +89,7 @@ object ModelTempTareas {
     /**
      * Crea unas tareas de prueba aleatoria
      */
-    fun iniciaPruebaTareas() {
+    suspend fun iniciaPruebaTareas() {
         val tecnicos = listOf(
             "Pepe Gotero",
             "Sacarino Pómez",
@@ -111,7 +113,7 @@ object ModelTempTareas {
             tareas.add(tarea)
         })
         // actualizamos el LiveData
-        tareasLiveData.value = tareas
+        tareasLiveData.postValue(tareas)
     }
 
     //filtro sin pagar
