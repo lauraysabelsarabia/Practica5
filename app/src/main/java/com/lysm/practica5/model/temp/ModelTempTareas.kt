@@ -2,6 +2,7 @@ package com.lysm.practica5.model.temp
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.lysm.practica5.model.Tarea
@@ -18,8 +19,8 @@ object ModelTempTareas {
     private lateinit var application: Application
 
     //el método invoke permite iniciar el objeto Singlenton
-    operator fun invoke(context:Context) {
-        this.application=context.applicationContext as Application
+    operator fun invoke(context: Context) {
+        this.application = context.applicationContext as Application
         iniciaPruebaTareas()
     }
 
@@ -45,7 +46,7 @@ object ModelTempTareas {
             tareas.add(tarea)
         } else {
             //si existe se sustituye
-            tareas.set(pos,tarea)
+            tareas.set(pos, tarea)
         }
 
         // se actualiza LiveData
@@ -57,10 +58,18 @@ object ModelTempTareas {
      * para avisar a los observadores
      */
 
-    fun delTarea (tarea:Tarea) {
+    suspend
+    fun delTarea(tarea: Tarea) {
+        //Thread.sleep(10000)
         tareas.remove(tarea)
-        tareasLiveData.value = tareas
+        //tareasLiveData.value = tareas
+        tareasLiveData.postValue(tareas)
     }
+
+    /* fun delTarea (tarea:Tarea) {
+         tareas.remove(tarea)
+         tareasLiveData.value = tareas
+     }*/
 
     /**
      * Crea unas tareas de prueba aleatoria
@@ -74,7 +83,7 @@ object ModelTempTareas {
             "Zipe Clement",
             "Zape Gómez"
         )
-        lateinit var tarea:Tarea
+        lateinit var tarea: Tarea
         (1..10).forEach({
             tarea = Tarea(
                 (0..4).random(),
@@ -89,23 +98,24 @@ object ModelTempTareas {
             tareas.add(tarea)
         })
         // actualizamos el LiveData
-        tareasLiveData.value=tareas
+        tareasLiveData.value = tareas
     }
 
     //filtro sin pagar
-    fun getTareasFiltroSinPagar(soloSinPagar:Boolean): LiveData<ArrayList<Tarea>> {
+    fun getTareasFiltroSinPagar(soloSinPagar: Boolean): LiveData<ArrayList<Tarea>> {
         //devuelve el LiveData con la  lista filtrada o entera
-        tareasLiveData.value=if(soloSinPagar)
+        tareasLiveData.value = if (soloSinPagar)
             tareas.filter { !it.pagado } as ArrayList<Tarea>
         else
             tareas
         return tareasLiveData
     }
+
     // filtro del estado
-    fun getTareasFiltroEstado(estado:Int): LiveData<ArrayList<Tarea>> {
+    fun getTareasFiltroEstado(estado: Int): LiveData<ArrayList<Tarea>> {
         //devuelve el LiveData con la  lista filtrada o entera
-        tareasLiveData.value=
-            tareas.filter { it.estado == estado} as ArrayList<Tarea>
+        tareasLiveData.value =
+            tareas.filter { it.estado == estado } as ArrayList<Tarea>
         return tareasLiveData
     }
 
@@ -113,10 +123,11 @@ object ModelTempTareas {
      * Varios filtros a la vez
      */
 
-    fun getTareasFiltroSinPagarEstado(soloSinPagar:Boolean, estado:Int):
+    fun getTareasFiltroSinPagarEstado(soloSinPagar: Boolean, estado: Int):
             LiveData<ArrayList<Tarea>> {
         //devuelve el LiveData con la lista filtrada
-        tareasLiveData.value = tareas.filter { !it.pagado && it.estado==estado} as ArrayList<Tarea>
+        tareasLiveData.value =
+            tareas.filter { !it.pagado && it.estado == estado } as ArrayList<Tarea>
         return tareasLiveData
     }
 

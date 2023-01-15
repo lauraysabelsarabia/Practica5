@@ -1,25 +1,25 @@
 package com.lysm.practica5.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.lysm.practica5.model.Tarea
 import com.lysm.practica5.repository.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class AppViewModel(application: Application):AndroidViewModel(application){
+class AppViewModel(application: Application) : AndroidViewModel(application) {
     //repositorio
-    private val repositorio:Repository
+    private val repositorio: Repository
+
     //liveData de lista de tareas
-    val tareasLiveData :LiveData<ArrayList<Tarea>>
+    val tareasLiveData: LiveData<ArrayList<Tarea>>
 
     // creamos el liveData de tipo Booleano. Representa nuestro filtro
     //private val soloSinPagarLiveData = MutableLiveData<Boolean>(false)
     //private val estadoLiveData= MutableLiveData<Int>(0)
     //LiveData que cuando se modifique un filtro cambia el tareasLiveData
-    val SOLO_SIN_PAGAR="SOLO_SIN_PAGAR"
-    val ESTADO="ESTADO"
+    val SOLO_SIN_PAGAR = "SOLO_SIN_PAGAR"
+    val ESTADO = "ESTADO"
     private val filtrosLiveData by lazy {//inicio tardío
         val mutableMap = mutableMapOf<String, Any?>(
             SOLO_SIN_PAGAR to false,
@@ -27,18 +27,19 @@ class AppViewModel(application: Application):AndroidViewModel(application){
         )
         MutableLiveData(mutableMap)
     }
+
     //inicio ViewModel
     init {
         //inicia repositorio
         Repository(getApplication<Application>().applicationContext)
-        repositorio=Repository
+        repositorio = Repository
         //tareasLiveData=repositorio.getAllTareas()
         //asocioamos el tareasLiveData en soloSinPagarLiveData
         //tareasLiveData=Transformations.switchMap(soloSinPagarLiveData)
         //{soloSinPagar->Repository.getTareasFiltroSinPagar(soloSinPagar)}
-       // tareasLiveData= Transformations.switchMap(estadoLiveData)
-      //  {estadoLiveData->Repository.getTareasFiltroEstado(estadoLiveData)}
-        tareasLiveData=Transformations.switchMap(filtrosLiveData)
+        // tareasLiveData= Transformations.switchMap(estadoLiveData)
+        //  {estadoLiveData->Repository.getTareasFiltroEstado(estadoLiveData)}
+        tareasLiveData = Transformations.switchMap(filtrosLiveData)
         { mapFiltro ->
             val aplicarSinPagar = mapFiltro!![SOLO_SIN_PAGAR] as Boolean
             val estado = mapFiltro!![ESTADO] as Int
@@ -55,8 +56,11 @@ class AppViewModel(application: Application):AndroidViewModel(application){
             }
         }
     }
+
     fun addTarea(tarea: Tarea) = repositorio.addTarea(tarea)
-    fun delTarea(tarea: Tarea) = repositorio.delTarea(tarea)
+    fun delTarea(tarea: Tarea) = viewModelScope.launch(Dispatchers.IO) {
+        repositorio.delTarea(tarea)
+    }
     //LiveData que cuando se modifique un filtro cambia el tareaLiveData
 
     private val soloSinPagarLiveData by lazy {  //creamos el LiveData de tipo Booleano. Repesenta nuestro filtro
@@ -72,10 +76,10 @@ class AppViewModel(application: Application):AndroidViewModel(application){
      */
     //fun setSoloSinPagar(soloSinPagar:Boolean){soloSinPagarLiveData.value=soloSinPagar}
 
-/**
- * Modifica el Map filtrosLiveData el elemento "SOLO_SIN_PAGAR"
- * que activará el Transformations de TareasLiveData
- */
+    /**
+     * Modifica el Map filtrosLiveData el elemento "SOLO_SIN_PAGAR"
+     * que activará el Transformations de TareasLiveData
+     */
 
     fun setSoloSinPagar(soloSinPagar: Boolean) {
         //recuperamos el map
@@ -85,6 +89,7 @@ class AppViewModel(application: Application):AndroidViewModel(application){
         //activamos el LiveData
         filtrosLiveData.value = mapa
     }
+
     /**
      * Modifica el Map filtrosLiveData el elemento "ESTADO"
      * que activará el Transformations de TareasLiveData lo
