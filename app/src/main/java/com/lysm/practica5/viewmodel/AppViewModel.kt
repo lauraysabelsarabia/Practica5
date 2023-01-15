@@ -57,7 +57,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun addTarea(tarea: Tarea) = repositorio.addTarea(tarea)
+    //fun addTarea(tarea: Tarea) = repositorio.addTarea(tarea)
+    fun addTarea(tarea: Tarea) = viewModelScope.launch(Dispatchers.IO) {
+        repositorio.addTarea(tarea)
+    }
     fun delTarea(tarea: Tarea) = viewModelScope.launch(Dispatchers.IO) {
         repositorio.delTarea(tarea)
     }

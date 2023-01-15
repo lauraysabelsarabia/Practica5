@@ -40,7 +40,7 @@ object ModelTempTareas {
      * que permitirá avisar a quien está observando
      */
 
-    fun addTarea(tarea: Tarea) {
+    /*fun addTarea(tarea: Tarea) {
         val pos = tareas.indexOf(tarea)
         if (pos < 0) { //Si no existe
             tareas.add(tarea)
@@ -51,6 +51,19 @@ object ModelTempTareas {
 
         // se actualiza LiveData
         tareasLiveData.value = tareas
+    }*/
+    suspend
+    fun addTarea(tarea: Tarea) {
+        val pos = tareas.indexOf(tarea)
+        if (pos < 0) { //Si no existe
+            tareas.add(tarea)
+        } else {
+            //si existe se sustituye
+            tareas.set(pos, tarea)
+        }
+
+        // se actualiza LiveData
+        tareasLiveData.postValue(tareas)
     }
 
     /**
